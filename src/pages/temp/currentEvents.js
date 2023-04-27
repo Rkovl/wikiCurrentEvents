@@ -8,9 +8,11 @@ export default function currentEvents() {
     useEffect(() => {
       // Define handleResponse function inside component
       window.handleResponse = (response) => {
-        let indexOfContent = response.parse.text['*'].indexOf('<div class="current-events-content description">')
-        console.log(indexOfContent)
-        setContent(response.parse.text['*'].slice(indexOfContent));
+        let indexOfContentStart = response.parse.text['*'].indexOf('<div class="current-events-content description">')
+        console.log(indexOfContentStart)
+        let indexOfContentEnd = response.parse.text['*'].indexOf('</div>', indexOfContentStart)
+        console.log(indexOfContentEnd)
+        setContent(response.parse.text['*'].slice(indexOfContentStart, indexOfContentEnd));
       };
   
       const url = "https://en.wikipedia.org/w/api.php?action=parse&page=Portal:Current_events&format=json&callback=handleResponse";
