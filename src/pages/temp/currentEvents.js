@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
 
@@ -27,7 +26,7 @@ export default function currentEvents() {
       };
     }, []);
   
-    return (
-      <div dangerouslySetInnerHTML={{__html: content}}></div>
-    );
+    return ( <>
+        <div dangerouslySetInnerHTML={{__html: content}}></div>
+    </> );
 }
