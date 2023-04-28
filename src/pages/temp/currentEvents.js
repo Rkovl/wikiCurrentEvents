@@ -1,3 +1,12 @@
+//TODO
+// MapBox
+//MapBox Pins
+//BootStrap
+//Pactials
+//CSS
+//TSS
+//more info
+
 import { useState, useEffect } from 'react';
 
 
