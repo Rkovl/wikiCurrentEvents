@@ -2,16 +2,27 @@ import { useState, useEffect } from 'react';
 
 
 export default function currentEvents() {
-    const [content, setContent] = useState('');
+
+    const [todayContent, setTodayContent] = useState('');
+    const [yesterdayContent, setYesterdayContent] = useState('');
+
+    let date = new Date(8.64e15).toString();
+    console.log(date)
 
     useEffect(() => {
-      // Define handleResponse function inside component
+      
       window.handleResponse = (response) => {
-        let indexOfContentStart = response.parse.text['*'].indexOf('<div class="current-events-content description">')
-        console.log(indexOfContentStart)
-        let indexOfContentEnd = response.parse.text['*'].indexOf('</div>', indexOfContentStart)
-        console.log(indexOfContentEnd)
-        setContent(response.parse.text['*'].slice(indexOfContentStart, indexOfContentEnd));
+
+        let indexOfTodayStart = response.parse.text['*'].indexOf('<div class="current-events-content description">');
+        let indexOfTodayEnd = response.parse.text['*'].indexOf('</div>', indexOfTodayStart);
+        console.log(indexOfTodayStart, indexOfTodayEnd)
+        setTodayContent(response.parse.text['*'].slice(indexOfTodayStart, indexOfTodayEnd));
+
+        let indexOfYesterdayStart = response.parse.text['*'].indexOf('<div class="current-events-content description">', indexOfTodayEnd);
+        let indexOfYesterdayEnd = response.parse.text['*'].indexOf('</div>', indexOfYesterdayStart);
+        console.log(indexOfYesterdayStart, indexOfYesterdayEnd)
+        setYesterdayContent(response.parse.text['*'].slice(indexOfYesterdayStart, indexOfYesterdayEnd));
+
       };
   
       const url = "https://en.wikipedia.org/w/api.php?action=parse&page=Portal:Current_events&format=json&callback=handleResponse";
@@ -27,6 +38,10 @@ export default function currentEvents() {
     }, []);
   
     return ( <>
-        <div dangerouslySetInnerHTML={{__html: content}}></div>
+        <h2>Today - {date}</h2>
+        <div dangerouslySetInnerHTML={{__html: todayContent}}></div>
+        <br></br>
+        <h2>Yesterday</h2>
+        <div dangerouslySetInnerHTML={{__html: yesterdayContent}}></div>
     </> );
 }
