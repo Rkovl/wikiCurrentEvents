@@ -8,7 +8,9 @@
 //more info
 
 import { useState, useEffect } from 'react';
-
+import Map from 'react-map-gl';
+import mapboxgl from '!mapbox-gl';
+mapboxgl.accessToken = 'pk.eyJ1Ijoid2lyZWRiYWxsIiwiYSI6ImNsaDB6dGtjajAyc2ozZHE0dXY2OGI3YW8ifQ._DCUbOU1anS9whzVryBXaQ'
 
 export default function currentEvents() {
 
@@ -52,5 +54,14 @@ export default function currentEvents() {
         <br></br>
         <h2>Yesterday</h2>
         <div dangerouslySetInnerHTML={{__html: yesterdayContent}}></div>
+        <Map
+      initialViewState={{
+        longitude: 0,
+        latitude: 35,
+        zoom: 1
+      }}
+      style={{width: 1000, height: 600}}
+      mapStyle="mapbox://styles/mapbox/streets-v9"
+    />
     </> );
 }
