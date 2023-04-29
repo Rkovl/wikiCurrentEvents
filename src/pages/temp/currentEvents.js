@@ -24,15 +24,19 @@ export default function currentEvents() {
       
       window.handleResponse = (response) => {
 
-        let indexOfTodayStart = response.parse.text['*'].indexOf('<div class="current-events-content description">');
-        let indexOfTodayEnd = response.parse.text['*'].indexOf('</div>', indexOfTodayStart);
-        console.log(indexOfTodayStart, indexOfTodayEnd)
-        setTodayContent(response.parse.text['*'].slice(indexOfTodayStart, indexOfTodayEnd));
+        let data =  response.parse.text['*']
+        data = data.replaceAll('<b>', '<b class="underline " >')
+        data = data.replaceAll('<ul>', '<ul class="mx-8">')
 
-        let indexOfYesterdayStart = response.parse.text['*'].indexOf('<div class="current-events-content description">', indexOfTodayEnd);
-        let indexOfYesterdayEnd = response.parse.text['*'].indexOf('</div>', indexOfYesterdayStart);
+        let indexOfTodayStart = data.indexOf('<div class="current-events-content description">');
+        let indexOfTodayEnd = data.indexOf('</div>', indexOfTodayStart);
+        console.log(indexOfTodayStart, indexOfTodayEnd)
+        setTodayContent(data.slice(indexOfTodayStart, indexOfTodayEnd));
+
+        let indexOfYesterdayStart = data.indexOf('<div class="current-events-content description">', indexOfTodayEnd);
+        let indexOfYesterdayEnd = data.indexOf('</div>', indexOfYesterdayStart);
         console.log(indexOfYesterdayStart, indexOfYesterdayEnd)
-        setYesterdayContent(response.parse.text['*'].slice(indexOfYesterdayStart, indexOfYesterdayEnd));
+        setYesterdayContent(data.slice(indexOfYesterdayStart, indexOfYesterdayEnd));
 
       };
   
@@ -64,17 +68,17 @@ export default function currentEvents() {
               latitude: 35,
               zoom: 1
             }}
-            style={{height: 600}}
+            style={{height: 550}}
             mapStyle="mapbox://styles/mapbox/streets-v9"
             />
 
-            <div className='bg-white shadow-xl p-8 text-slate-700 text-sm leading-6 sm:text-base sm:leading-7 dark:bg-slate-800 dark:text-slate-400 rounded-xl'>
-              <h2>Today - {date}</h2>
+            <div className='bg-white shadow-xl p-8 text-slate-700 text-sm leading-6 sm:text-base sm:leading-7 dark:bg-slate-800 dark:text-slate-400 rounded-xl mt-3'>
+              <h2 className='text-xl'>Today</h2>
               <div dangerouslySetInnerHTML={{__html: todayContent}}></div>
             </div>
             <br></br>
             <div className='bg-white shadow-xl p-8 text-slate-700 text-sm leading-6 sm:text-base sm:leading-7 dark:bg-slate-800 dark:text-slate-400 rounded-xl'>
-              <h2>Yesterday</h2>
+              <h2 className='text-xl'>Yesterday</h2>
               <div dangerouslySetInnerHTML={{__html: yesterdayContent}}></div>
             </div>
           </div>
