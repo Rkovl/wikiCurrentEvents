@@ -50,6 +50,11 @@ export default function currentEvents() {
   
     return ( <>
         <div className='antialiased text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900'>
+          <div className='py-3 border-b border-slate-900/10 lg:px-8 lg:border-1 dark:border-slate-300/10 mx-4 lg:mx-0 mb-3'>
+            <div className='relative flex items-center'>
+              <div className='mx-auto text-base font-bold tracking-wider uppercase border-2 p-1 border-slate-400'>Current Events</div> 
+            </div>
+          </div>
 
           <div className='mx-auto max-w-7xl'>
             
