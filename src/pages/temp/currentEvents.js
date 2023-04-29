@@ -49,19 +49,31 @@ export default function currentEvents() {
     }, []);
   
     return ( <>
-        <h2>Today - {date}</h2>
-        <div dangerouslySetInnerHTML={{__html: todayContent}}></div>
-        <br></br>
-        <h2>Yesterday</h2>
-        <div dangerouslySetInnerHTML={{__html: yesterdayContent}}></div>
-        <Map
-      initialViewState={{
-        longitude: 0,
-        latitude: 35,
-        zoom: 1
-      }}
-      style={{width: 1000, height: 600}}
-      mapStyle="mapbox://styles/mapbox/streets-v9"
-    />
+        <div className='antialiased text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900'>
+
+          <div className='mx-auto max-w-7xl'>
+            
+            <Map
+            initialViewState={{
+              longitude: 0,
+              latitude: 35,
+              zoom: 1
+            }}
+            style={{height: 600}}
+            mapStyle="mapbox://styles/mapbox/streets-v9"
+            />
+
+            <div className='bg-white shadow-xl p-8 text-slate-700 text-sm leading-6 sm:text-base sm:leading-7 dark:bg-slate-800 dark:text-slate-400 rounded-xl'>
+              <h2>Today - {date}</h2>
+              <div dangerouslySetInnerHTML={{__html: todayContent}}></div>
+            </div>
+            <br></br>
+            <div className='bg-white shadow-xl p-8 text-slate-700 text-sm leading-6 sm:text-base sm:leading-7 dark:bg-slate-800 dark:text-slate-400 rounded-xl'>
+              <h2>Yesterday</h2>
+              <div dangerouslySetInnerHTML={{__html: yesterdayContent}}></div>
+            </div>
+          </div>
+
+      </div>
     </> );
 }
