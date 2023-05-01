@@ -16,6 +16,7 @@ export default function currentEvents() {
 
     const [todayContent, setTodayContent] = useState('');
     const [yesterdayContent, setYesterdayContent] = useState('');
+    const [content, setContent] = useState('');
 
     let date = new Date(8.64e15).toString();
     console.log(date)
@@ -25,18 +26,22 @@ export default function currentEvents() {
       window.handleResponse = (response) => {
 
         let data =  response.parse.text['*']
+
+        const indexOfTodayStart = data.indexOf('<div class="current-events-content description">');
+        const indexOfTodayEnd = data.indexOf('</div>', indexOfTodayStart);
+        // console.log(indexOfTodayStart, indexOfTodayEnd)
+        setTodayContent(data.slice(indexOfTodayStart, indexOfTodayEnd));
+
+        const indexOfYesterdayStart = data.indexOf('<div class="current-events-content description">', indexOfTodayEnd);
+        const indexOfYesterdayEnd = data.indexOf('</div>', indexOfYesterdayStart);
+        // console.log(indexOfYesterdayStart, indexOfYesterdayEnd)
+        setYesterdayContent(data.slice(indexOfYesterdayStart, indexOfYesterdayEnd));
+
+        data = (`<h2 class='text-xl'>Today</h2>`+data.slice(indexOfTodayStart, indexOfTodayEnd)+`<br></br>`+`<h2 class='text-xl'>Yesterday</h2>`+data.slice(indexOfYesterdayStart, indexOfYesterdayEnd))
         data = data.replaceAll('<b>', '<b class="underline " >')
         data = data.replaceAll('<ul>', '<ul class="mx-8">')
 
-        let indexOfTodayStart = data.indexOf('<div class="current-events-content description">');
-        let indexOfTodayEnd = data.indexOf('</div>', indexOfTodayStart);
-        console.log(indexOfTodayStart, indexOfTodayEnd)
-        setTodayContent(data.slice(indexOfTodayStart, indexOfTodayEnd));
-
-        let indexOfYesterdayStart = data.indexOf('<div class="current-events-content description">', indexOfTodayEnd);
-        let indexOfYesterdayEnd = data.indexOf('</div>', indexOfYesterdayStart);
-        console.log(indexOfYesterdayStart, indexOfYesterdayEnd)
-        setYesterdayContent(data.slice(indexOfYesterdayStart, indexOfYesterdayEnd));
+        setContent(data)
 
       };
   
@@ -72,7 +77,7 @@ export default function currentEvents() {
             mapStyle="mapbox://styles/mapbox/streets-v9"
             />
 
-            <div className='bg-white shadow-xl p-8 text-slate-700 text-sm leading-6 sm:text-base sm:leading-7 dark:bg-slate-800 dark:text-slate-400 rounded-xl mt-3'>
+            {/* <div className='bg-white shadow-xl p-8 text-slate-700 text-sm leading-6 sm:text-base sm:leading-7 dark:bg-slate-800 dark:text-slate-400 rounded-xl mt-3'>
               <h2 className='text-xl'>Today</h2>
               <div dangerouslySetInnerHTML={{__html: todayContent}}></div>
             </div>
@@ -80,6 +85,9 @@ export default function currentEvents() {
             <div className='bg-white shadow-xl p-8 text-slate-700 text-sm leading-6 sm:text-base sm:leading-7 dark:bg-slate-800 dark:text-slate-400 rounded-xl'>
               <h2 className='text-xl'>Yesterday</h2>
               <div dangerouslySetInnerHTML={{__html: yesterdayContent}}></div>
+            </div> */}
+            <div className='bg-white shadow-xl p-8 text-slate-700 text-sm leading-6 sm:text-base sm:leading-7 dark:bg-slate-800 dark:text-slate-400 rounded-xl mt-3'>
+              <div dangerouslySetInnerHTML={{__html: content}}></div>
             </div>
           </div>
 
