@@ -17,6 +17,7 @@ export default function currentEvents() {
     const [todayContent, setTodayContent] = useState('');
     const [yesterdayContent, setYesterdayContent] = useState('');
     const [content, setContent] = useState('');
+    const [innerText, setInnerText] = useState([]);
 
     let date = new Date(8.64e15).toString();
     console.log(date)
@@ -37,9 +38,13 @@ export default function currentEvents() {
         // console.log(indexOfYesterdayStart, indexOfYesterdayEnd)
         setYesterdayContent(data.slice(indexOfYesterdayStart, indexOfYesterdayEnd));
 
-        data = (`<h2 class='text-xl'>Today</h2>`+data.slice(indexOfTodayStart, indexOfTodayEnd)+`<br></br>`+`<h2 class='text-xl'>Yesterday</h2>`+data.slice(indexOfYesterdayStart, indexOfYesterdayEnd))
+        data = (`<h2 class='text-xl'>Today.</h2>`+data.slice(indexOfTodayStart, indexOfTodayEnd)+`<br></br>`+`<h2 class='text-xl'>Yesterday.</h2>`+data.slice(indexOfYesterdayStart, indexOfYesterdayEnd))
         data = data.replaceAll('<b>', '<b class="underline " >')
         data = data.replaceAll('<ul>', '<ul class="mx-8">')
+
+        const ttsText = data.match(/(?<=>)\w+(?=<)/g) || []
+        console.log(ttsText)
+        setInnerText(ttsText)
 
         setContent(data)
 
