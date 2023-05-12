@@ -12,6 +12,8 @@ import Map from 'react-map-gl';
 import mapboxgl from '!mapbox-gl';
 mapboxgl.accessToken = 'pk.eyJ1Ijoid2lyZWRiYWxsIiwiYSI6ImNsaDB6dGtjajAyc2ozZHE0dXY2OGI3YW8ifQ._DCUbOU1anS9whzVryBXaQ'
 
+
+
 export default function currentEvents() {
 
     const [todayContent, setTodayContent] = useState('');
@@ -49,21 +51,44 @@ export default function currentEvents() {
         setContent(data)
 
       };
+
+      // const launchTTS = async () => {
+      //   let result = await fetch("https://storage.googleapis.com/speechify-api-cdn/speechifyapi.min.mjs")
+
+      //   const articleRootElement = document.querySelector("article");
+
+      //   console.log(result)
+
+      //   const widget = result.makeSpeechifyExperience({
+      //     rootElement: articleRootElement,
+      //     useSpeechifyRoot: true
+      //   });
+          
+      //   await widget.mount();
+          
+      // }
+
   
       const url = "https://en.wikipedia.org/w/api.php?action=parse&page=Portal:Current_events&format=json&callback=handleResponse";
       const script = document.createElement("script");
       script.src = url;
       document.body.appendChild(script);
-  
+
+      
+      
+      // launchTTS()
+
       return () => {
-        document.body.removeChild(script);
-        // Remove handleResponse function from global scope
-        delete window.handleResponse;
+
+
       };
     }, []);
   
     return ( <>
         <div className='antialiased text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 dark:bg-gradient-to-tr from-slate-900 from-50% via-slate-800 via-80% to-slate-900 to-90%'>
+
+          
+
           <div className='py-3 border-b border-slate-900/10 lg:px-8 lg:border-1 dark:border-slate-300/10 mx-4 lg:mx-0 mb-3'>
             <div className='relative flex items-center'>
               <div className='mx-auto text-base font-bold tracking-wider uppercase border-2 p-1 border-slate-400'>Current Events</div> 
@@ -92,10 +117,13 @@ export default function currentEvents() {
               <div dangerouslySetInnerHTML={{__html: yesterdayContent}}></div>
             </div> */}
             <div className='bg-white shadow-xl p-8 text-slate-700 text-sm leading-6 sm:text-base sm:leading-7 dark:bg-slate-800 dark:text-slate-400 rounded-xl mt-3'>
-              <div dangerouslySetInnerHTML={{__html: content}}></div>
+              <article>
+              <div id='article' dangerouslySetInnerHTML={{__html: content}}></div>
+              </article>
             </div>
           </div>
 
       </div>
+      <div id="speechify-root"></div>
     </> );
 }
