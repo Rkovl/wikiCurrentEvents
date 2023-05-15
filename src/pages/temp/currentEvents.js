@@ -30,6 +30,34 @@ export default function currentEvents() {
     console.log(date)
 
     useEffect(() => {
+
+      const geojson = {
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: [-77.032, 38.913]
+            },
+            properties: {
+              title: 'Mapbox',
+              description: 'Washington, D.C.'
+            }
+          },
+          {
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: [-122.414, 37.776]
+            },
+            properties: {
+              title: 'Mapbox',
+              description: 'San Francisco, California'
+            }
+          }
+        ]
+      };
       
       window.handleResponse = (response) => {
 
@@ -65,33 +93,7 @@ export default function currentEvents() {
         zoom: zoom
       });
 
-      const geojson = {
-        type: 'FeatureCollection',
-        features: [
-          {
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: [-77.032, 38.913]
-            },
-            properties: {
-              title: 'Mapbox',
-              description: 'Washington, D.C.'
-            }
-          },
-          {
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: [-122.414, 37.776]
-            },
-            properties: {
-              title: 'Mapbox',
-              description: 'San Francisco, California'
-            }
-          }
-        ]
-      };
+
   
       for (const feature of geojson.features) {
           // create a HTML element for each feature
@@ -106,7 +108,7 @@ export default function currentEvents() {
             .setHTML(`<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`)
           )
           .addTo(map.current);
-        }
+        };
 
       // const launchTTS = async () => {
       //   let result = await fetch("https://storage.googleapis.com/speechify-api-cdn/speechifyapi.min.mjs")
