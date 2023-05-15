@@ -7,8 +7,7 @@
 //TSS
 //more info
 
-import { useState, useEffect } from 'react';
-import Map from 'react-map-gl';
+import { useRef, useState, useEffect } from 'react';
 import mapboxgl from '!mapbox-gl';
 mapboxgl.accessToken = 'pk.eyJ1Ijoid2lyZWRiYWxsIiwiYSI6ImNsaDB6dGtjajAyc2ozZHE0dXY2OGI3YW8ifQ._DCUbOU1anS9whzVryBXaQ'
 
@@ -20,6 +19,12 @@ export default function currentEvents() {
     const [yesterdayContent, setYesterdayContent] = useState('');
     const [content, setContent] = useState('');
     const [innerText, setInnerText] = useState([]);
+
+    const mapContainer = useRef(null);
+    const map = useRef(null);
+    const [lng, setLng] = useState(0);
+    const [lat, setLat] = useState(35);
+    const [zoom, setZoom] = useState(1);
 
     let date = new Date(8.64e15).toString();
     console.log(date)
@@ -52,6 +57,57 @@ export default function currentEvents() {
 
       };
 
+      if (map.current) return; // initialize map only once
+        map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/streets-v9',
+        center: [lng, lat],
+        zoom: zoom
+      });
+
+      const geojson = {
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: [-77.032, 38.913]
+            },
+            properties: {
+              title: 'Mapbox',
+              description: 'Washington, D.C.'
+            }
+          },
+          {
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: [-122.414, 37.776]
+            },
+            properties: {
+              title: 'Mapbox',
+              description: 'San Francisco, California'
+            }
+          }
+        ]
+      };
+  
+      for (const feature of geojson.features) {
+          // create a HTML element for each feature
+          const el = document.createElement('div');
+          el.className = 'marker';
+          
+          // make a marker for each feature and add it to the map
+          new mapboxgl.Marker(el)
+          .setLngLat(feature.geometry.coordinates)
+          .setPopup(
+            new mapboxgl.Popup({ offset: 25 }) // add popups
+            .setHTML(`<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`)
+          )
+          .addTo(map.current);
+        }
+
       // const launchTTS = async () => {
       //   let result = await fetch("https://storage.googleapis.com/speechify-api-cdn/speechifyapi.min.mjs")
 
@@ -83,7 +139,11 @@ export default function currentEvents() {
 
       };
     }, []);
-  
+
+
+    
+
+
     return ( <>
         <div className='antialiased text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 dark:bg-gradient-to-tr from-slate-900 from-50% via-slate-800 via-80% to-slate-900 to-90%'>
 
@@ -97,7 +157,8 @@ export default function currentEvents() {
 
           <div className='mx-auto max-w-7xl'>
             
-            <Map
+            <div ref={mapContainer} style={{height: 550}} className="map-container" />
+            {/* <Map
             initialViewState={{
               longitude: 0,
               latitude: 35,
@@ -105,7 +166,7 @@ export default function currentEvents() {
             }}
             style={{height: 550}}
             mapStyle="mapbox://styles/mapbox/streets-v9"
-            />
+            /> */}
 
             {/* <div className='bg-white shadow-xl p-8 text-slate-700 text-sm leading-6 sm:text-base sm:leading-7 dark:bg-slate-800 dark:text-slate-400 rounded-xl mt-3'>
               <h2 className='text-xl'>Today</h2>
