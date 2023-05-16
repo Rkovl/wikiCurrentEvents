@@ -1,4 +1,4 @@
-export default countryList = {
+const countryList = {
 
 	"Albania":{
 		"alpha2" : "AL",
@@ -1098,7 +1098,7 @@ export default countryList = {
 		"longitude" : 158.25
 	  },
 	
-	"Moldova Republic of":{
+	"Moldova":{
 		"alpha2" : "MD",
 		"alpha3" : "MDA",
 		"numeric" : 498,
@@ -1393,7 +1393,7 @@ export default countryList = {
 		"latitude" : 46,
 		"longitude" : 25
 	  },
-	"Russian Federation":{
+	"Russia":{
 		"alpha2" : "RU",
 		"alpha3" : "RUS",
 		"numeric" : 643,
@@ -1750,6 +1750,13 @@ export default countryList = {
 		"latitude" : 49,
 		"longitude" : 32
 	  },
+	"Ukrainian":{
+		"alpha2" : "UA",
+		"alpha3" : "UKR",
+		"numeric" : 804,
+		"latitude" : 49,
+		"longitude" : 32
+	},
 	"United Arab Emirates":{
 		"alpha2" : "AE",
 		"alpha3" : "ARE",
@@ -1878,3 +1885,5 @@ export default countryList = {
 		"longitude" : 65
 	  }
 	}
+
+	export default countryList
