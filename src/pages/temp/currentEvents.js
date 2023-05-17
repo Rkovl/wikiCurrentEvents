@@ -9,7 +9,7 @@
 
 import { useRef, useState, useEffect } from 'react';
 import mapboxgl from '!mapbox-gl';
-mapboxgl.accessToken = process.env.MAP_KEY
+mapboxgl.accessToken = `${process.env.MAP_KEY}`
 import countryList from '../../data/countries'
 
 
