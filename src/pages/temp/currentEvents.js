@@ -9,7 +9,7 @@
 
 import { useRef, useState, useEffect } from 'react';
 import mapboxgl from '!mapbox-gl';
-mapboxgl.accessToken = `${process.env.MAP_KEY}`
+mapboxgl.accessToken = 'pk.eyJ1Ijoid2lyZWRiYWxsIiwiYSI6ImNsaDB6dGtjajAyc2ozZHE0dXY2OGI3YW8ifQ._DCUbOU1anS9whzVryBXaQ'
 import countryList from '../../data/countries'
 
 
