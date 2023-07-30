@@ -9,9 +9,9 @@
 
 import { useRef, useState, useEffect } from 'react';
 import mapboxgl from '!mapbox-gl';
-mapboxgl.accessToken = 'pk.eyJ1Ijoid2lyZWRiYWxsIiwiYSI6ImNsaDB6dGtjajAyc2ozZHE0dXY2OGI3YW8ifQ._DCUbOU1anS9whzVryBXaQ'
+// mapboxgl.accessToken = 'pk.eyJ1Ijoid2lyZWRiYWxsIiwiYSI6ImNsaDB6dGtjajAyc2ozZHE0dXY2OGI3YW8ifQ._DCUbOU1anS9whzVryBXaQ'
 import countryList from '../../data/countries'
-
+console.log(process.env.MAP_KEY, "mapkey")
 
 
 export default function currentEvents() {
@@ -77,34 +77,39 @@ export default function currentEvents() {
           }
         }
         console.log(dataHold)
-        let geojson = {
-          type: 'FeatureCollection',
-          features: dataHold
-        }
-        console.log(geojson)
-
-        if (map.current) return; // initialize map only once
-        map.current = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/streets-v9',
-        center: [lng, lat],
-        zoom: zoom
-      });
+        const mapFun = async () => {
+          mapboxgl.accessToken = await `pk.eyJ1Ijoid2lyZWRiYWxsIiwiYSI6ImNsaDB6dGtjajAyc2ozZHE0dXY2OGI3YW8ifQ._DCUbOU1anS9whzVryBXaQ`
+          let geojson = {
+            type: 'FeatureCollection',
+            features: dataHold
+          }
+          console.log(geojson, process.env.MAP_KEY)
   
-      for (const feature of geojson.features) {
-          // create a HTML element for each feature
-          const el = document.createElement('div');
-          el.className = 'marker';
+          if (map.current) return; // initialize map only once
+          map.current = new mapboxgl.Map({
+            container: mapContainer.current,
+            style: 'mapbox://styles/mapbox/streets-v9',
+            center: [lng, lat],
+            zoom: zoom
+          });
+    
+          for (const feature of geojson.features) {
+            // create a HTML element for each feature
+            const el = document.createElement('div');
+            el.className = 'marker';
+            
+            // make a marker for each feature and add it to the map
+            new mapboxgl.Marker({el})
+            .setLngLat(feature.geometry.coordinates)
+            .setPopup(
+              new mapboxgl.Popup({ offset: 25 }) // add popups
+              .setHTML(`<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`)
+            )
+            .addTo(map.current);
+          };
           
-          // make a marker for each feature and add it to the map
-          new mapboxgl.Marker(el)
-          .setLngLat(feature.geometry.coordinates)
-          .setPopup(
-            new mapboxgl.Popup({ offset: 25 }) // add popups
-            .setHTML(`<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`)
-          )
-          .addTo(map.current);
         };
+        mapFun()
 
         setInnerText(ttsText)
 
@@ -131,7 +136,7 @@ export default function currentEvents() {
 
 
     return ( <>
-        <div className='antialiased text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 dark:bg-gradient-to-tr from-slate-900 from-50% via-slate-800 via-80% to-slate-900 to-90%'>
+        <div className='antialiased text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 dark:bg-gradient-to-tr from-slate-900 from-50% via-slate-800 via-80% to-slate-900 to-90% h-[100vh]'>
 
           
 
@@ -143,7 +148,7 @@ export default function currentEvents() {
 
           <div className='mx-auto max-w-7xl'>
             
-            <div ref={mapContainer} style={{height: 550}} className="map-container" />
+            <div ref={mapContainer}  className="map-container h-[40vh] " />
             {/* <Map
             initialViewState={{
               longitude: 0,
@@ -163,7 +168,7 @@ export default function currentEvents() {
               <h2 className='text-xl'>Yesterday</h2>
               <div dangerouslySetInnerHTML={{__html: yesterdayContent}}></div>
             </div> */}
-            <div className='bg-white shadow-xl p-8 text-slate-700 text-sm leading-6 sm:text-base sm:leading-7 dark:bg-slate-800 dark:text-slate-400 rounded-xl mt-3'>
+            <div id='article-container' className='bg-white shadow-xl p-8 text-slate-700 text-sm leading-6 sm:text-base sm:leading-7 dark:bg-slate-800 dark:text-slate-400 rounded-xl mt-3 max-h-[50vh] overflow-auto'>
               <article>
               <div id='article' dangerouslySetInnerHTML={{__html: content}}></div>
               </article>
