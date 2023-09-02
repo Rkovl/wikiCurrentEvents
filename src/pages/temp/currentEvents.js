@@ -1,17 +1,11 @@
 //TODO
-// MapBox
-//MapBox Pins
-//BootStrap
+//MapBox Pins TextBox
 //Pactials
-//CSS
-//TSS
 //more info
 
 import { useRef, useState, useEffect } from 'react';
 import mapboxgl from '!mapbox-gl';
-// mapboxgl.accessToken = 'pk.eyJ1Ijoid2lyZWRiYWxsIiwiYSI6ImNsaDB6dGtjajAyc2ozZHE0dXY2OGI3YW8ifQ._DCUbOU1anS9whzVryBXaQ'
 import countryList from '../../data/countries'
-console.log(process.env.MAP_KEY, "mapkey")
 
 
 export default function currentEvents() {
@@ -51,25 +45,28 @@ export default function currentEvents() {
         data = (`<h2 class='text-xl'>Today.</h2>`+data.slice(indexOfTodayStart, indexOfTodayEnd)+`<br></br>`+`<h2 class='text-xl'>Yesterday.</h2>`+data.slice(indexOfYesterdayStart, indexOfYesterdayEnd))
         data = data.replaceAll('<b>', '<b class="underline " >')
         data = data.replaceAll('<ul>', '<ul class="mx-8">')
-
-        const ttsText = data.match(/(?<=>)\w+(?=<)/g) || []
+        console.log(data, "data")
+        const ttsText = data.replaceAll(/<(.*?)>/g, '')
         console.log(ttsText)
+
+        const possiblePins = data.match(/(?<=>)\w+(?=<)/g) || []
+        console.log(possiblePins, "possiblePins")
         console.log(countryList)
         let dataHold = []
-        for(let A = 0; A < ttsText.length; A++){
-          console.log(ttsText[A])
-          if(countryList[ttsText[A]]){
-            console.log(countryList[ttsText[A]].latitude)
+        for(let A = 0; A < possiblePins.length; A++){
+          console.log(possiblePins[A])
+          if(countryList[possiblePins[A]]){
+            console.log(countryList[possiblePins[A]].latitude)
             dataHold.push(
               {
                 type: 'Feature',
                 geometry: {
                   type: 'Point',
-                  coordinates: [countryList[ttsText[A]].longitude, countryList[ttsText[A]].latitude]
+                  coordinates: [countryList[possiblePins[A]].longitude, countryList[possiblePins[A]].latitude]
                 },
                 properties: {
                   title: 'Event',
-                  description: `Event at ${ttsText[A]}`
+                  description: `Event at ${possiblePins[A]}`
                 }
               },
             )
@@ -78,7 +75,7 @@ export default function currentEvents() {
         }
         console.log(dataHold)
         const mapFun = async () => {
-          mapboxgl.accessToken = await `pk.eyJ1Ijoid2lyZWRiYWxsIiwiYSI6ImNsaDB6dGtjajAyc2ozZHE0dXY2OGI3YW8ifQ._DCUbOU1anS9whzVryBXaQ`
+          mapboxgl.accessToken = await process.env.NEXT_PUBLIC_MAPBOX_TOKEN
           let geojson = {
             type: 'FeatureCollection',
             features: dataHold
@@ -111,7 +108,7 @@ export default function currentEvents() {
         };
         mapFun()
 
-        setInnerText(ttsText)
+        setInnerText(possiblePins)
 
         setContent(data)
 
@@ -142,22 +139,15 @@ export default function currentEvents() {
 
           <div className='py-3 border-b border-slate-900/10 lg:px-8 lg:border-1 dark:border-slate-300/10 mx-4 lg:mx-0 mb-3'>
             <div className='relative flex items-center'>
+              <div class="px-4 py-2 invisible">.</div>
               <div className='mx-auto text-base font-bold tracking-wider uppercase border-2 p-1 border-slate-400'>Current Events</div> 
+              <button class="px-4 py-2 font-semibold text-lg bg-cyan-500 text-white rounded-full shadow-sm z-10">{`>`}</button>
             </div>
           </div>
 
           <div className='mx-auto max-w-7xl'>
             
             <div ref={mapContainer}  className="map-container h-[40vh] " />
-            {/* <Map
-            initialViewState={{
-              longitude: 0,
-              latitude: 35,
-              zoom: 1
-            }}
-            style={{height: 550}}
-            mapStyle="mapbox://styles/mapbox/streets-v9"
-            /> */}
 
             {/* <div className='bg-white shadow-xl p-8 text-slate-700 text-sm leading-6 sm:text-base sm:leading-7 dark:bg-slate-800 dark:text-slate-400 rounded-xl mt-3'>
               <h2 className='text-xl'>Today</h2>
@@ -174,8 +164,6 @@ export default function currentEvents() {
               </article>
             </div>
           </div>
-
       </div>
-      <div id="speechify-root"></div>
     </> );
 }
